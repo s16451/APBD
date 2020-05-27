@@ -8,6 +8,7 @@ using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Extensions.Configuration;
+using APBD.Models.Previous;
 
 namespace APBD
 {

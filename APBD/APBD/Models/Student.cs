@@ -1,14 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 
-namespace APBD
+namespace APBD.Models
 {
-    public class Student
+    public partial class Student
     {
-        public int IdStudent { get; set; }
+        public string IndexNumber { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string IndexNumber { get; set; }
-        public DateTime Birthdate { get; set; }
-        public string Studies { get; set; }
+        public DateTime BirthDate { get; set; }
+        public int IdEnrollment { get; set; }
+        public string Password { get; set; }
+        public string RefToken { get; set; }
+        public string Salt { get; set; }
+
+        public virtual Enrollment IdEnrollmentNavigation { get; set; }
     }
 }

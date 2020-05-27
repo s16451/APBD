@@ -1,4 +1,4 @@
-﻿namespace APBD
+﻿namespace APBD.Models.Previous
 {
     public class EncryptedCredentials
     {

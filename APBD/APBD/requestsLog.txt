@@ -1,0 +1,25 @@
+Log: 27/05/2020 14:19:10
+Method: GET
+Path: /
+Body: 
+QueryString: 
+Log: 27/05/2020 14:19:10
+Method: GET
+Path: /favicon.ico
+Body: 
+QueryString: 
+Log: 27/05/2020 14:19:28
+Method: GET
+Path: /api/students
+Body: 
+QueryString: 
+Log: 27/05/2020 14:19:28
+Method: GET
+Path: /favicon.ico
+Body: 
+QueryString: 
+Log: 27/05/2020 14:19:28
+Method: GET
+Path: /api/students
+Body: 
+QueryString: 
