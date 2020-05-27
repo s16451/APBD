@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
+﻿using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.Extensions.Configuration;
-using APBD.Models.Previous;
+using APBD.Models;
+using APBD.DTOs.Requests;
 
 namespace APBD
 {
@@ -25,40 +18,17 @@ namespace APBD
         }
         
         [HttpGet]
-        public IActionResult GetStudents(string orderBy)
+        public IActionResult GetStudents()
         {
-            var list = new List<Student>();
-
-            using (SqlConnection con = new SqlConnection(ConString))
-            using (SqlCommand com = new SqlCommand())
-            {
-                com.Connection = con;
-                com.CommandText = "select * from student";
-
-                con.Open();
-                SqlDataReader dr = com.ExecuteReader();
-                while (dr.Read())
-                {
-                    var st = new Student();
-                    st.IndexNumber = dr["IndexNumber"].ToString();
-                    st.FirstName = dr["FirstName"].ToString();
-                    st.LastName = dr["LastName"].ToString();
-                    list.Add(st);
-                }
-            }
-            
-            if (orderBy == "lastname")
-            {
-                return Ok(list.OrderBy(s => s.LastName));
-            }
-            
-            return Ok(list);
+            var db = new s16451Context();
+            return Ok(db.Student.ToList());
         }
 
         [HttpGet("{id}")]
         public IActionResult GetStudent(string id)
         {
-            var student = _service.GetStudent(id);
+            var db = new s16451Context();
+            var student = db.Student.Single(s => s.IndexNumber == id);
             if (student == null)
             {
                 return NotFound();
@@ -67,23 +37,59 @@ namespace APBD
             return Ok(student);
         }
 
-        [HttpPost]
-        public IActionResult CreateStudent(Student student)
-        {
-            student.IndexNumber = $"s{new Random().Next(1, 20000)}";
-            return Ok(student);
-        }
-
         [HttpPut("{id}")]
-        public IActionResult UpdateStudent(int id)
+        public IActionResult UpdateStudent(string id, UpdateStudentRequest request)
         {
-            return Ok("Aktualizacja dokończona");
+            var db = new s16451Context();
+            var student = new Student
+            {
+                IndexNumber = id
+            };
+
+            db.Attach( student );
+            if ( request.IndexNumber != null ) {
+                student.IndexNumber = request.IndexNumber;
+                db.Entry( student ).Property( "IndexNumber" ).IsModified = true;
+            }
+            if ( request.FirstName != null ) {
+                student.FirstName = request.FirstName;
+                db.Entry( student ).Property( "FirstName" ).IsModified = true;
+            }
+            if ( request.LastName != null ) {
+                student.FirstName = request.LastName;
+                db.Entry( student ).Property( "LastName" ).IsModified = true;
+            }
+            if ( request.BirthDate != null ) {
+                student.BirthDate = request.GetBirthDate();
+                db.Entry( student ).Property( "BirthDate" ).IsModified = true;
+            }
+            if ( request.Password != null ) {
+                student.Password = request.Password;
+                db.Entry( student ).Property( "Password" ).IsModified = true;
+            }
+            if ( request.IdEnrollment != null ) {
+                student.IdEnrollment = request.IdEnrollment.Value;
+                db.Entry( student ).Property( "IdEnrollemnt" ).IsModified = true;
+            }
+            
+            db.SaveChanges();
+
+            return Ok("Aktualizacja ukończona");
         }
         
         [HttpDelete("{id}")]
-        public IActionResult DeleteStudent(int id)
+        public IActionResult DeleteStudent(string id)
         {
-            return Ok("Usuwanie ukończona");
+            var db = new s16451Context();
+            var student = new Student
+            {
+                IndexNumber = id
+            };
+            db.Attach( student );
+            db.Student.Remove( student );
+            db.SaveChanges();
+
+            return Ok("Usuwanie ukończone");
         }
     }
 }

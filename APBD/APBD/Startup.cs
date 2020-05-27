@@ -20,7 +20,6 @@ namespace APBD
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -46,7 +45,6 @@ namespace APBD
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IStudentDbService studentDbService)
         {
             if (env.IsDevelopment())
@@ -63,6 +61,7 @@ namespace APBD
             });
 
             app.UseMiddleware<LoggingMiddleware>();
+            /*
             app.Use(async (context, next) =>
             {
                 if (!context.Request.Headers.ContainsKey("Index"))
@@ -82,7 +81,7 @@ namespace APBD
                 }
                 
                 await next();
-            });
+            });*/
             
             app.UseRouting();
 
