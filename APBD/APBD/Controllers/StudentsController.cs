@@ -41,10 +41,11 @@ namespace APBD
         public IActionResult UpdateStudent(string id, UpdateStudentRequest request)
         {
             var db = new s16451Context();
-            var student = new Student
-            {
-                IndexNumber = id
-            };
+            var student = db.Student.Single(s => s.IndexNumber == id);
+
+            if ( student == null ) {
+                return NotFound();
+            }
 
             db.Attach( student );
             if ( request.IndexNumber != null ) {
@@ -81,10 +82,12 @@ namespace APBD
         public IActionResult DeleteStudent(string id)
         {
             var db = new s16451Context();
-            var student = new Student
-            {
-                IndexNumber = id
-            };
+            var student = db.Student.Single(s => s.IndexNumber == id);
+
+            if ( student == null ) {
+                return NotFound();
+            }
+
             db.Attach( student );
             db.Student.Remove( student );
             db.SaveChanges();
